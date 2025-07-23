@@ -633,6 +633,21 @@ section {
     
     .skills-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .skill-category {
+        padding: 1.2rem;
+    }
+    .skill-category h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    .skill-items {
+        gap: 0.5rem;
+    }
+    .skill-item {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
     }
     
     .projects-grid {
@@ -662,6 +677,23 @@ section {
     
     .container {
         padding: 0 15px;
+    }
+    .skills-grid {
+        gap: 0.7rem;
+    }
+    .skill-category {
+        padding: 0.7rem;
+    }
+    .skill-category h3 {
+        font-size: 1rem;
+    }
+    .skill-items {
+        gap: 0.3rem;
+    }
+    .skill-item {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+        word-break: break-word;
     }
 }
 

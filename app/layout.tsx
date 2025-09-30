@@ -4,6 +4,8 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
+import { Sidebar } from "@/components/sidebar"
+import { ElectricBackground } from "@/components/electric-background"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -21,7 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <ElectricBackground />
+        <div className="relative z-10 flex min-h-screen">
+          <Sidebar />
+          <main className="flex-1 lg:ml-80">
+            <Suspense fallback={null}>{children}</Suspense>
+          </main>
+        </div>
         <Analytics />
       </body>
     </html>

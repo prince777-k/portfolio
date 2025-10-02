@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ExternalLink, Github, Star, GitFork, Pin } from "lucide-react"
 import Image from "next/image"
+import { useToast } from "@/hooks/use-toast"
 
 interface GitHubRepo {
   id: number
@@ -37,6 +38,7 @@ export function GithubProjects() {
   const [pinnedRepos, setPinnedRepos] = useState<string[]>(DEFAULT_PINNED)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   useEffect(() => {
     fetchRepos()
@@ -67,11 +69,23 @@ export function GithubProjects() {
         return prev.filter((name) => name !== repoName)
       } else if (prev.length < 6) {
         return [...prev, repoName]
+      } else {
+        toast({
+          title: "Pin Limit Reached",
+          description: "You can only pin up to 6 projects. Unpin a project first to pin a new one.",
+          variant: "destructive",
+        })
+        return prev
       }
-      return prev
     })
 
-    setRepos((prev) => prev.map((repo) => (repo.name === repoName ? { ...repo, pinned: !repo.pinned } : repo)))
+    setRepos((prev) =>
+      prev.map((repo) =>
+        (repo.name === repoName && pinnedRepos.length < 6) || pinnedRepos.includes(repoName)
+          ? { ...repo, pinned: !repo.pinned }
+          : repo,
+      ),
+    )
   }
 
   const pinnedRepositories = repos.filter((repo) => pinnedRepos.includes(repo.name))
@@ -95,7 +109,6 @@ export function GithubProjects() {
 
   return (
     <div className="space-y-12">
-      {/* Pinned Projects */}
       {pinnedRepositories.length > 0 && (
         <div>
           <div className="mb-6 flex items-center gap-2">
@@ -105,18 +118,17 @@ export function GithubProjects() {
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {pinnedRepositories.map((repo) => (
-              <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} />
+              <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={true} />
             ))}
           </div>
         </div>
       )}
 
-      {/* All Projects */}
       <div>
         <h3 className="mb-6 text-xl font-semibold">All Projects</h3>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {otherRepositories.map((repo) => (
-            <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} />
+            <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={false} />
           ))}
         </div>
       </div>
@@ -124,7 +136,15 @@ export function GithubProjects() {
   )
 }
 
-function ProjectCard({ repo, onTogglePin }: { repo: GitHubRepo; onTogglePin: (name: string) => void }) {
+function ProjectCard({
+  repo,
+  onTogglePin,
+  isPinned,
+}: {
+  repo: GitHubRepo
+  onTogglePin: (name: string) => void
+  isPinned: boolean
+}) {
   return (
     <Card className="flex flex-col transition-all hover:shadow-lg">
       <CardHeader>
@@ -139,15 +159,22 @@ function ProjectCard({ repo, onTogglePin }: { repo: GitHubRepo; onTogglePin: (na
         </div>
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="text-lg">{repo.name}</CardTitle>
-          <Button variant="ghost" size="icon" onClick={() => onTogglePin(repo.name)} className="h-8 w-8 flex-shrink-0">
-            <Pin className={`h-4 w-4 ${repo.pinned ? "fill-primary text-primary" : ""}`} />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onTogglePin(repo.name)}
+            className="h-8 w-8 flex-shrink-0"
+            title={isPinned ? "Unpin project" : "Pin project"}
+          >
+            <Pin
+              className={`h-4 w-4 transition-colors ${isPinned ? "fill-primary text-primary" : "text-muted-foreground"}`}
+            />
           </Button>
         </div>
         <CardDescription className="line-clamp-2">{repo.description || "No description available"}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1">
         <div className="space-y-4">
-          {/* Tech Stack */}
           <div className="flex flex-wrap gap-2">
             {repo.language && <Badge variant="secondary">{repo.language}</Badge>}
             {repo.topics.slice(0, 3).map((topic) => (
@@ -156,8 +183,6 @@ function ProjectCard({ repo, onTogglePin }: { repo: GitHubRepo; onTogglePin: (na
               </Badge>
             ))}
           </div>
-
-          {/* Stats */}
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4" />

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface Particle {
   x: number
@@ -12,6 +12,7 @@ interface Particle {
 
 export function ElectricBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -20,7 +21,11 @@ export function ElectricBackground() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas size
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -28,9 +33,8 @@ export function ElectricBackground() {
     resizeCanvas()
     window.addEventListener("resize", resizeCanvas)
 
-    // Create particles
     const particles: Particle[] = []
-    const particleCount = 80
+    const particleCount = 100
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -42,33 +46,39 @@ export function ElectricBackground() {
       })
     }
 
-    // Animation loop
     let animationFrameId: number
     const animate = () => {
-      ctx.fillStyle = "rgba(22, 24, 35, 0.1)"
+      ctx.fillStyle = "rgba(255, 255, 255, 0.08)"
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Update and draw particles
       particles.forEach((particle, i) => {
-        // Update position
+        const dx = mousePos.x - particle.x
+        const dy = mousePos.y - particle.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+
+        if (distance < 200) {
+          const force = (200 - distance) / 200
+          particle.vx += (dx / distance) * force * 0.1
+          particle.vy += (dy / distance) * force * 0.1
+        }
+
         particle.x += particle.vx
         particle.y += particle.vy
 
-        // Bounce off edges
+        particle.vx *= 0.99
+        particle.vy *= 0.99
+
         if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
 
-        // Keep particles in bounds
         particle.x = Math.max(0, Math.min(canvas.width, particle.x))
         particle.y = Math.max(0, Math.min(canvas.height, particle.y))
 
-        // Draw particle
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(100, 255, 218, ${0.3 + particle.energy * 0.4})`
+        ctx.arc(particle.x, particle.y, 2.5, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(59, 130, 246, ${0.4 + particle.energy * 0.5})`
         ctx.fill()
 
-        // Draw connections
         particles.slice(i + 1).forEach((otherParticle) => {
           const dx = particle.x - otherParticle.x
           const dy = particle.y - otherParticle.y
@@ -78,9 +88,9 @@ export function ElectricBackground() {
             ctx.beginPath()
             ctx.moveTo(particle.x, particle.y)
             ctx.lineTo(otherParticle.x, otherParticle.y)
-            const opacity = (1 - distance / 150) * 0.3
-            ctx.strokeStyle = `rgba(100, 255, 218, ${opacity})`
-            ctx.lineWidth = 1
+            const opacity = (1 - distance / 150) * 0.4
+            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`
+            ctx.lineWidth = 1.5
             ctx.stroke()
           }
         })
@@ -93,9 +103,10 @@ export function ElectricBackground() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("mousemove", handleMouseMove)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [])
+  }, [mousePos])
 
-  return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-0" style={{ opacity: 0.6 }} />
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0" style={{ opacity: 0.5 }} />
 }

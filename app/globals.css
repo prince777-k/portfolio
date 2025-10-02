@@ -118,7 +118,17 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2322d3ee" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>')
+      12 12, auto;
   }
+
+  button,
+  a,
+  [role="button"] {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2.5"><circle cx="12" cy="12" r="6" fill="%233b82f6" fill-opacity="0.2"/><circle cx="12" cy="12" r="3"/></svg>')
+      12 12, pointer;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

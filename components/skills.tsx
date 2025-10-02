@@ -157,7 +157,7 @@ export function Skills() {
       <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
         Skills & Technologies
       </h3>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-3">
         {skillCategories.map((category) => {
           const CategoryIcon = category.icon
           return (
@@ -172,11 +172,11 @@ export function Skills() {
               <CardHeader className="relative">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${category.gradient} shadow-lg`}
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${category.gradient} shadow-lg sm:h-12 sm:w-12`}
                   >
-                    <CategoryIcon className="h-6 w-6 text-white" />
+                    <CategoryIcon className="h-5 w-5 text-white sm:h-6 sm:w-6" />
                   </div>
-                  <CardTitle className="text-lg font-bold">{category.category}</CardTitle>
+                  <CardTitle className="text-base font-bold sm:text-lg">{category.category}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="relative">
@@ -186,12 +186,12 @@ export function Skills() {
                     return (
                       <div
                         key={skill.name}
-                        className="group/skill flex items-center gap-3 rounded-lg border bg-card/50 p-3 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-accent hover:shadow-md"
+                        className="group/skill flex items-center gap-2 rounded-lg border bg-card/50 p-2.5 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-accent hover:shadow-md sm:gap-3 sm:p-3"
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 transition-colors group-hover/skill:bg-primary/20">
-                          <SkillIcon className="h-4 w-4 text-primary transition-transform group-hover/skill:scale-110" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/10 transition-colors group-hover/skill:bg-primary/20 sm:h-8 sm:w-8">
+                          <SkillIcon className="h-3.5 w-3.5 text-primary transition-transform group-hover/skill:scale-110 sm:h-4 sm:w-4" />
                         </div>
-                        <span className="text-sm font-medium">{skill.name}</span>
+                        <span className="text-xs font-medium sm:text-sm">{skill.name}</span>
                       </div>
                     )
                   })}

@@ -52,7 +52,7 @@ export function Sidebar() {
           variant="outline"
           size="icon"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="bg-sidebar text-sidebar-foreground"
+          className="bg-sidebar text-sidebar-foreground shadow-lg"
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
@@ -63,7 +63,7 @@ export function Sidebar() {
           variant="outline"
           size="icon"
           onClick={() => setCollapsed(!collapsed)}
-          className="bg-sidebar text-sidebar-foreground"
+          className="bg-sidebar text-sidebar-foreground shadow-lg transition-all hover:scale-105"
         >
           {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
         </Button>
@@ -75,12 +75,12 @@ export function Sidebar() {
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 ${collapsed ? "lg:w-20" : "lg:w-80"}`}
       >
-        <div className="flex h-full flex-col px-8 py-12">
+        <div className="flex h-full flex-col px-4 py-12 sm:px-6 lg:px-8">
           <div className="mb-12">
             {!collapsed && (
               <>
                 <div className="mb-6 flex justify-center">
-                  <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-primary shadow-lg shadow-primary/30">
+                  <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-primary shadow-lg shadow-primary/30 sm:h-32 sm:w-32">
                     <Image
                       src="/blockchain-developer-with-digital-network-connecti.jpg"
                       alt="Blockchain Developer"
@@ -90,12 +90,14 @@ export function Sidebar() {
                     />
                   </div>
                 </div>
-                <h1 className="text-balance text-4xl font-bold tracking-tight text-sidebar-foreground">
+                <h1 className="text-balance text-2xl font-bold tracking-tight text-sidebar-foreground sm:text-3xl lg:text-4xl">
                   Hinata Sugimoto
                 </h1>
-                <p className="mt-3 text-pretty text-lg font-medium text-primary">Full-Stack & Blockchain Developer</p>
-                <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4 text-accent" />
+                <p className="mt-3 text-pretty text-base font-medium text-primary sm:text-lg">
+                  Full-Stack & Blockchain Developer
+                </p>
+                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
+                  <MapPin className="h-4 w-4 flex-shrink-0 text-accent" />
                   <p>Nishi ward, Saitama, Japan</p>
                 </div>
               </>
@@ -124,7 +126,7 @@ export function Sidebar() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all sm:px-4 ${
                     isActive
                       ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
                       : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"

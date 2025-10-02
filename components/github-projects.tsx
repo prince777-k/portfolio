@@ -19,26 +19,34 @@ interface GitHubRepo {
   language: string
   topics: string[]
   updated_at: string
-  pinned?: boolean
 }
 
 const GITHUB_USERNAME = "prince777-k"
-
-const DEFAULT_PINNED = [
-  "wallet-standard",
-  "rustfs",
-  "solana-defi",
-  "portfolio",
-  "blockchain-explorer",
-  "defi-dashboard",
-]
+const PINNED_STORAGE_KEY = "pinnedProjects"
 
 export function GithubProjects() {
   const [repos, setRepos] = useState<GitHubRepo[]>([])
-  const [pinnedRepos, setPinnedRepos] = useState<string[]>(DEFAULT_PINNED)
+  const [pinnedRepos, setPinnedRepos] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
+
+  useEffect(() => {
+    const stored = localStorage.getItem(PINNED_STORAGE_KEY)
+    if (stored) {
+      try {
+        setPinnedRepos(JSON.parse(stored))
+      } catch (e) {
+        console.error("Failed to parse pinned projects", e)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (pinnedRepos.length > 0) {
+      localStorage.setItem(PINNED_STORAGE_KEY, JSON.stringify(pinnedRepos))
+    }
+  }, [pinnedRepos])
 
   useEffect(() => {
     fetchRepos()
@@ -50,12 +58,7 @@ export function GithubProjects() {
       if (!response.ok) throw new Error("Failed to fetch repositories")
 
       const data = await response.json()
-      const reposWithPinned = data.map((repo: GitHubRepo) => ({
-        ...repo,
-        pinned: pinnedRepos.includes(repo.name),
-      }))
-
-      setRepos(reposWithPinned)
+      setRepos(data)
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred")
     } finally {
@@ -78,14 +81,6 @@ export function GithubProjects() {
         return prev
       }
     })
-
-    setRepos((prev) =>
-      prev.map((repo) =>
-        (repo.name === repoName && pinnedRepos.length < 6) || pinnedRepos.includes(repoName)
-          ? { ...repo, pinned: !repo.pinned }
-          : repo,
-      ),
-    )
   }
 
   const pinnedRepositories = repos.filter((repo) => pinnedRepos.includes(repo.name))
@@ -116,7 +111,7 @@ export function GithubProjects() {
             <h3 className="text-xl font-semibold">Pinned Projects</h3>
             <Badge variant="secondary">{pinnedRepositories.length}/6</Badge>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {pinnedRepositories.map((repo) => (
               <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={true} />
             ))}
@@ -126,7 +121,7 @@ export function GithubProjects() {
 
       <div>
         <h3 className="mb-6 text-xl font-semibold">All Projects</h3>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {otherRepositories.map((repo) => (
             <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={false} />
           ))}
@@ -162,7 +157,10 @@ function ProjectCard({
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onTogglePin(repo.name)}
+            onClick={(e) => {
+              e.stopPropagation()
+              onTogglePin(repo.name)
+            }}
             className="h-8 w-8 flex-shrink-0"
             title={isPinned ? "Unpin project" : "Pin project"}
           >

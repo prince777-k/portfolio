@@ -116,7 +116,7 @@ export function GithubProjects() {
             <h3 className="text-xl font-semibold">Pinned Projects</h3>
             <Badge variant="secondary">{pinnedRepositories.length}/6</Badge>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {pinnedRepositories.map((repo) => (
               <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={true} />
             ))}
@@ -126,7 +126,7 @@ export function GithubProjects() {
 
       <div>
         <h3 className="mb-6 text-xl font-semibold">All Projects</h3>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {otherRepositories.map((repo) => (
             <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={false} />
           ))}
@@ -146,15 +146,15 @@ function ProjectCard({
   isPinned: boolean
 }) {
   return (
-    <Card className="flex flex-col transition-all hover:shadow-lg">
+    <Card className="group flex flex-col border-2 transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/20">
       <CardHeader>
-        <div className="mb-4 aspect-video w-full overflow-hidden rounded-lg bg-muted">
+        <div className="mb-4 aspect-video w-full overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
           <Image
-            src={`/.jpg?height=200&width=400&query=${repo.name} ${repo.language} project screenshot`}
+            src={`/.jpg?key=irz5u&height=200&width=400&query=${repo.name} ${repo.language} project screenshot`}
             alt={repo.name}
             width={400}
             height={200}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform group-hover:scale-105"
           />
         </div>
         <div className="flex items-start justify-between gap-2">
@@ -176,20 +176,24 @@ function ProjectCard({
       <CardContent className="flex-1">
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
-            {repo.language && <Badge variant="secondary">{repo.language}</Badge>}
+            {repo.language && (
+              <Badge variant="secondary" className="bg-primary/10 text-primary">
+                {repo.language}
+              </Badge>
+            )}
             {repo.topics.slice(0, 3).map((topic) => (
-              <Badge key={topic} variant="outline">
+              <Badge key={topic} variant="outline" className="border-accent/50 text-accent">
                 {topic}
               </Badge>
             ))}
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Star className="h-4 w-4" />
+              <Star className="h-4 w-4 text-accent" />
               <span>{repo.stargazers_count}</span>
             </div>
             <div className="flex items-center gap-1">
-              <GitFork className="h-4 w-4" />
+              <GitFork className="h-4 w-4 text-secondary" />
               <span>{repo.forks_count}</span>
             </div>
           </div>
@@ -203,7 +207,7 @@ function ProjectCard({
           </a>
         </Button>
         {repo.homepage && (
-          <Button variant="default" size="sm" asChild className="flex-1">
+          <Button variant="default" size="sm" asChild className="flex-1 bg-primary">
             <a href={repo.homepage} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="mr-2 h-4 w-4" />
               Live Site

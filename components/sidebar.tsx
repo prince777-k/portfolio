@@ -18,6 +18,7 @@ import {
   MessageSquare,
   ChevronLeft,
   ChevronRight,
+  MapPin,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -70,7 +71,7 @@ export function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 transform bg-sidebar transition-all duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-40 transform bg-sidebar border-r-2 border-border shadow-2xl transition-all duration-300 ease-in-out ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 ${collapsed ? "lg:w-20" : "lg:w-80"}`}
       >
@@ -79,7 +80,7 @@ export function Sidebar() {
             {!collapsed && (
               <>
                 <div className="mb-6 flex justify-center">
-                  <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-primary/20">
+                  <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-primary shadow-lg shadow-primary/30">
                     <Image
                       src="/blockchain-developer-with-digital-network-connecti.jpg"
                       alt="Blockchain Developer"
@@ -92,15 +93,18 @@ export function Sidebar() {
                 <h1 className="text-balance text-4xl font-bold tracking-tight text-sidebar-foreground">
                   Hinata Sugimoto
                 </h1>
-                <p className="mt-3 text-pretty text-lg text-sidebar-foreground/80">Full-Stack & Blockchain Developer</p>
-                <p className="mt-2 text-sm text-sidebar-foreground/60">Nishi ward, Saitama, Japan</p>
+                <p className="mt-3 text-pretty text-lg font-medium text-primary">Full-Stack & Blockchain Developer</p>
+                <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4 text-accent" />
+                  <p>Nishi ward, Saitama, Japan</p>
+                </div>
               </>
             )}
             {collapsed && (
               <div className="flex justify-center">
-                <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-primary/20">
+                <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-primary shadow-md">
                   <Image
-                    src="/blockchain-developer-avatar.jpg"
+                    src="/blockchain-developer-with-digital-network-connecti.jpg"
                     alt="Avatar"
                     width={48}
                     height={48}
@@ -120,9 +124,9 @@ export function Sidebar() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
                       : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   } ${collapsed ? "justify-center" : ""}`}
                   title={collapsed ? item.name : undefined}
@@ -142,7 +146,7 @@ export function Sidebar() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sidebar-foreground/60 transition-colors hover:text-sidebar-primary"
+                className="text-muted-foreground transition-all hover:scale-110 hover:text-primary"
                 title={social.name}
               >
                 <span className="sr-only">{social.name}</span>

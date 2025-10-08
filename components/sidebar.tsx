@@ -75,12 +75,12 @@ export function Sidebar() {
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 ${collapsed ? "lg:w-20" : "lg:w-80"}`}
       >
-        <div className="flex h-full flex-col px-4 py-12 sm:px-6 lg:px-8">
-          <div className="mb-12">
+        <div className="flex h-full flex-col overflow-y-auto px-4 py-12 sm:px-8">
+          <div className="mb-8 sm:mb-12">
             {!collapsed && (
               <>
-                <div className="mb-6 flex justify-center">
-                  <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-primary shadow-lg shadow-primary/30 sm:h-32 sm:w-32">
+                <div className="mb-4 sm:mb-6 flex justify-center">
+                  <div className="relative h-24 w-24 sm:h-32 sm:w-32 overflow-hidden rounded-full border-4 border-primary shadow-lg shadow-primary/30">
                     <Image
                       src="/blockchain-developer-with-digital-network-connecti.jpg"
                       alt="Blockchain Developer"
@@ -90,14 +90,14 @@ export function Sidebar() {
                     />
                   </div>
                 </div>
-                <h1 className="text-balance text-2xl font-bold tracking-tight text-sidebar-foreground sm:text-3xl lg:text-4xl">
+                <h1 className="text-balance text-2xl sm:text-4xl font-bold tracking-tight text-sidebar-foreground">
                   Hinata Sugimoto
                 </h1>
-                <p className="mt-3 text-pretty text-base font-medium text-primary sm:text-lg">
+                <p className="mt-2 sm:mt-3 text-pretty text-base sm:text-lg font-medium text-primary">
                   Full-Stack & Blockchain Developer
                 </p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
-                  <MapPin className="h-4 w-4 flex-shrink-0 text-accent" />
+                <div className="mt-2 sm:mt-3 flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4 text-accent flex-shrink-0" />
                   <p>Nishi ward, Saitama, Japan</p>
                 </div>
               </>
@@ -126,7 +126,7 @@ export function Sidebar() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all sm:px-4 ${
+                  className={`flex items-center gap-3 rounded-lg px-3 sm:px-4 py-2.5 text-sm font-medium transition-all ${
                     isActive
                       ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
                       : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -141,7 +141,9 @@ export function Sidebar() {
           </nav>
 
           {/* Social Links */}
-          <div className={`mt-8 flex gap-4 ${collapsed ? "flex-col items-center" : ""}`}>
+          <div
+            className={`mt-6 sm:mt-8 flex gap-3 sm:gap-4 ${collapsed ? "flex-col items-center" : "justify-center sm:justify-start"}`}
+          >
             {socials.map((social) => (
               <a
                 key={social.name}
@@ -161,7 +163,10 @@ export function Sidebar() {
 
       {/* Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setMobileMenuOpen(false)} />
+        <div
+          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
       )}
     </>
   )

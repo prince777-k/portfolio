@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { ElectricBackground } from "@/components/electric-background"
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -26,10 +27,11 @@ export default function RootLayout({
         <ElectricBackground />
         <div className="relative z-10 flex min-h-screen">
           <Sidebar />
-          <main className="flex-1 lg:ml-80">
+          <main className="flex-1 transition-all duration-300 lg:ml-80">
             <Suspense fallback={null}>{children}</Suspense>
           </main>
         </div>
+        <Toaster />
         <Analytics />
       </body>
     </html>

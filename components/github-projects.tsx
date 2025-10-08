@@ -22,7 +22,7 @@ interface GitHubRepo {
 }
 
 const GITHUB_USERNAME = "prince777-k"
-const PINNED_STORAGE_KEY = "pinnedProjects"
+const PINNED_STORAGE_KEY = "pinned-projects"
 
 export function GithubProjects() {
   const [repos, setRepos] = useState<GitHubRepo[]>([])
@@ -37,7 +37,7 @@ export function GithubProjects() {
       try {
         setPinnedRepos(JSON.parse(stored))
       } catch (e) {
-        console.error("Failed to parse pinned projects", e)
+        console.error("Failed to parse pinned repos:", e)
       }
     }
   }, [])
@@ -109,9 +109,11 @@ export function GithubProjects() {
           <div className="mb-6 flex items-center gap-2">
             <Pin className="h-5 w-5 text-primary" />
             <h3 className="text-xl font-semibold">Pinned Projects</h3>
-            <Badge variant="secondary">{pinnedRepositories.length}/6</Badge>
+            <Badge variant="secondary" className="bg-primary/10 text-primary">
+              {pinnedRepositories.length}/6
+            </Badge>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {pinnedRepositories.map((repo) => (
               <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={true} />
             ))}
@@ -121,7 +123,7 @@ export function GithubProjects() {
 
       <div>
         <h3 className="mb-6 text-xl font-semibold">All Projects</h3>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {otherRepositories.map((repo) => (
             <ProjectCard key={repo.id} repo={repo} onTogglePin={togglePin} isPinned={false} />
           ))}
@@ -153,14 +155,11 @@ function ProjectCard({
           />
         </div>
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg">{repo.name}</CardTitle>
+          <CardTitle className="text-base sm:text-lg">{repo.name}</CardTitle>
           <Button
             variant="ghost"
             size="icon"
-            onClick={(e) => {
-              e.stopPropagation()
-              onTogglePin(repo.name)
-            }}
+            onClick={() => onTogglePin(repo.name)}
             className="h-8 w-8 flex-shrink-0"
             title={isPinned ? "Unpin project" : "Pin project"}
           >
@@ -169,18 +168,20 @@ function ProjectCard({
             />
           </Button>
         </div>
-        <CardDescription className="line-clamp-2">{repo.description || "No description available"}</CardDescription>
+        <CardDescription className="line-clamp-2 text-sm">
+          {repo.description || "No description available"}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex-1">
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
             {repo.language && (
-              <Badge variant="secondary" className="bg-primary/10 text-primary">
+              <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
                 {repo.language}
               </Badge>
             )}
             {repo.topics.slice(0, 3).map((topic) => (
-              <Badge key={topic} variant="outline" className="border-accent/50 text-accent">
+              <Badge key={topic} variant="outline" className="border-accent/50 text-accent text-xs">
                 {topic}
               </Badge>
             ))}
@@ -197,15 +198,15 @@ function ProjectCard({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        <Button variant="outline" size="sm" asChild className="flex-1 bg-transparent">
+      <CardFooter className="flex flex-col sm:flex-row gap-2">
+        <Button variant="outline" size="sm" asChild className="flex-1 bg-transparent w-full sm:w-auto">
           <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
             <Github className="mr-2 h-4 w-4" />
             GitHub
           </a>
         </Button>
         {repo.homepage && (
-          <Button variant="default" size="sm" asChild className="flex-1 bg-primary">
+          <Button variant="default" size="sm" asChild className="flex-1 bg-primary w-full sm:w-auto">
             <a href={repo.homepage} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="mr-2 h-4 w-4" />
               Live Site

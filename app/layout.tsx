@@ -8,7 +8,7 @@ import "./globals.css"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "Prince | Full-Stack & Blockchain Developer",
+  title: "Hinata Sugimoto | Full-Stack & Blockchain Developer",
   description:
     "Freelance Full-Stack & Blockchain Developer specializing in Web3 Architecture, DeFi Solutions, EVM & Solana",
   generator: "v0.app",
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={null}>
           {children}

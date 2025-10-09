@@ -1,15 +1,20 @@
 "use client"
 
 import { useState } from "react"
-import LoginScreen from "@/components/login-screen"
-import Desktop from "@/components/desktop"
+import { LockScreen } from "@/components/windows/lock-screen"
+import { Desktop } from "@/components/windows/desktop"
+import { WindowManagerProvider } from "@/components/windows/window-manager"
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLocked, setIsLocked] = useState(true)
+
+  if (isLocked) {
+    return <LockScreen onUnlock={() => setIsLocked(false)} />
+  }
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-black">
-      {!isLoggedIn ? <LoginScreen onLogin={() => setIsLoggedIn(true)} /> : <Desktop />}
-    </div>
+    <WindowManagerProvider>
+      <Desktop />
+    </WindowManagerProvider>
   )
 }

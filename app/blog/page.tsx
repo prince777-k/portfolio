@@ -232,78 +232,64 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-12 lg:px-12 lg:py-20">
-      <div className="mb-12">
-        <h1 className="text-balance text-4xl font-bold tracking-tight">Blog</h1>
-        <p className="mt-4 text-pretty text-lg text-muted-foreground">
-          Insights on blockchain development, Web3 architecture, DeFi protocols, and cutting-edge decentralized
-          technologies.
-        </p>
-      </div>
-
-      <div className="grid gap-6">
-        {blogPosts.map((post) => {
-          const isExpanded = expandedPosts.has(post.id)
-          return (
-            <Card
-              key={post.id}
-              className="group cursor-pointer border-2 transition-all hover:border-primary hover:shadow-xl hover:shadow-primary/20"
-              onClick={() => togglePost(post.id)}
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl transition-colors group-hover:text-primary">{post.title}</CardTitle>
-                    <CardDescription className="mt-2 text-base">{post.description}</CardDescription>
-                  </div>
-                  <Button variant="ghost" size="icon" className="flex-shrink-0">
-                    {isExpanded ? (
-                      <ChevronUp className="h-5 w-5 text-primary" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
-                    )}
-                  </Button>
+    <div className="space-y-6">
+      {blogPosts.map((post) => {
+        const isExpanded = expandedPosts.has(post.id)
+        return (
+          <Card
+            key={post.id}
+            className="group cursor-pointer border-2 transition-all hover:border-cyan-500 hover:shadow-lg"
+            onClick={() => togglePost(post.id)}
+          >
+            <CardHeader>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <CardTitle className="text-xl transition-colors group-hover:text-cyan-600">{post.title}</CardTitle>
+                  <CardDescription className="mt-2">{post.description}</CardDescription>
                 </div>
-                <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4 text-accent" />
-                    <time dateTime={post.date}>
-                      {new Date(post.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>
-                  </div>
-                  <span>•</span>
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="h-4 w-4 text-secondary" />
-                    <span>{post.readTime}</span>
-                  </div>
+                <Button variant="ghost" size="icon" className="flex-shrink-0">
+                  {isExpanded ? (
+                    <ChevronUp className="h-5 w-5 text-cyan-500" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-gray-400" />
+                  )}
+                </Button>
+              </div>
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4 text-cyan-500" />
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
                 </div>
-              </CardHeader>
-              {isExpanded && (
-                <CardContent className="border-t-2 pt-6">
-                  <p className="text-pretty leading-relaxed text-foreground">{post.content}</p>
-                </CardContent>
-              )}
-              <CardContent className={isExpanded ? "pt-4" : ""}>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant="secondary"
-                      className="bg-primary/10 text-primary transition-all hover:bg-primary hover:text-primary-foreground"
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
+                <span>•</span>
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4 text-purple-500" />
+                  <span>{post.readTime}</span>
                 </div>
+              </div>
+            </CardHeader>
+            {isExpanded && (
+              <CardContent className="border-t-2 pt-6">
+                <p className="leading-relaxed text-gray-700">{post.content}</p>
               </CardContent>
-            </Card>
-          )
-        })}
-      </div>
+            )}
+            <CardContent className={isExpanded ? "pt-4" : ""}>
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="bg-cyan-50 text-cyan-600 hover:bg-cyan-100">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )
+      })}
     </div>
   )
 }

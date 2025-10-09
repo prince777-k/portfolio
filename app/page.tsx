@@ -1,9 +1,21 @@
-import { Hero } from "@/components/hero"
+"use client"
+
+import { useState } from "react"
+import { LoginScreen } from "@/components/login-screen"
+import { Desktop } from "@/components/desktop"
 
 export default function Home() {
-  return (
-    <div className="mx-auto max-w-5xl px-6 py-12 lg:px-12 lg:py-20">
-      <Hero />
-    </div>
-  )
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userName, setUserName] = useState("")
+
+  const handleLogin = (name: string) => {
+    setUserName(name)
+    setIsLoggedIn(true)
+  }
+
+  if (!isLoggedIn) {
+    return <LoginScreen onLogin={handleLogin} />
+  }
+
+  return <Desktop userName={userName} />
 }
